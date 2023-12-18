@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style1.css">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+
+  <title>Target</title>
+  <link rel="icon" sizes="192x192" href="media/icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="https://image.ibb.co/gKHsTc/icon_white_192.png"> <!-- icon-white-192.png-->
+  <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="media/favicon.ico?v=1.0">
+
+  <meta property="og:image" content="https://image.ibb.co/e8Qqwx/za_fb_msg.png" /> <!-- za_fb_msg.png-->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="http://tarca.tk" />
+  <meta property="og:title" content="Tarča" />
+
+  <meta 
+     name='viewport' 
+     content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' 
+/>
+
+  <meta name="theme-color" content="#FF0000">
+</head>
+
+
+<body onresize="onBodyResize()" onload="playSound(marioHello, 0.8);">
+ 
+  <div id="top">
+    <a onclick="reset();" id="header">Target</a>
+    <h1 id="shotsLeft"></h1>
+    <div id="right">
+      <h2 id="score">0<span class="spaan"> /0</span></h2>
+      <h2 id="time">30.0</h2>
+    </div>
+  </div>
+
+  <canvas id="canvas" onmousedown="onCanvasClick(event)" ontouchstart="" class = "canvas" height="100" width = "100"></canvas>
+  
+  <div id= "canvas_div" class="canvas">
+
+    
+      <div id = "main_menu" class="menu">
+          <img id = "logo" src="https://preview.ibb.co/juFepH/logo.png"> <!--logo.png-->
+          <h1 class="header1">Target</h1>
+          <a class="button" onclick='gameMode = "time"; gameGoal = 30; gameMulti = false; showGame();'>Time <span class = "button_span">30 s</span></a>
+          <a class="button" onclick='gameMode = "score"; gameGoal = 15; gameMulti = false; showGame();'>Points <span class = "button_span">15 points</span></a>
+          <a id = "btn_2" class="button" onclick='showCustomGame(true);'>Multiplayer</a>
+          <a id = "btn_1" class="button last" onclick='showCustomGame(false);'>Custom game</a>
+          
+      </div>
+
+
+
+      <div id = "custom_menu" class="menu">
+          <h1 class="header1" onclick="reset()" >Target</h1>
+
+          <span class="menu_text">Game ends ...</span>
+          <input type="number" name="input_gameGoal" class="textBox" onblur="this.placeholder = '30'" onfocus="this.placeholder = ''" placeholder="30"><br>
+          <div class="menu_div">
+              <a class="button select checked" id="checkS" onclick='checkBoxFunc("checkS", "checkT")'>seconds</a>
+              <a class="button select" id="checkT" onclick='checkBoxFunc("checkT", "checkS")'>points</a>
+          </div>
+
+          <span class="menu_text">Target's speed</span>
+          <input type="number" name="input_speed" class="textBox" onblur="this.placeholder = '100%'" onfocus="this.placeholder = ''" placeholder="100%"><br>
+          
+          <span class="menu_text">Target's size</span>
+          <div class="menu_div">
+            <input type="number" name="input_sizeMin" onblur="this.placeholder = '30%'" onfocus="this.placeholder = ''" class="textBox" placeholder="30%">
+            <span class="menu_text"> - </span>
+            <input type="number" name="input_sizeMax" onblur="this.placeholder = '230%'" onfocus="this.placeholder = ''" class="textBox" placeholder="230%">
+          </div>
+
+          <span class="menu_text">Target's health</span>
+          <input type="number" name="input_health" class="textBox" onblur="this.placeholder = '100'" onfocus="this.placeholder = ''" placeholder="100"><br>  
+          
+          <span class="menu_text">Shots per target <span class="menu_text_small"> (0 - infinity)</span></span>
+          <input type="number"name="input_shots" class="textBox" onblur="this.placeholder = '3'" onfocus="this.placeholder = ''" placeholder="3"><br>  
+
+          <br class = "custom_m_multi">
+          <span class="menu_text custom_m_multi">Name of the game</span>
+          <input type="text" name="input_roomName" class="textBox custom_m_multi" onblur="this.placeholder = 'Target Multiplayer'" onfocus="this.placeholder = ''" placeholder="Tarča Multiplayer"><br>
+          
+          <span class="menu_text custom_m_multi">Number of attempts <span class="menu_text_small"> (0 - infinity)</span></span>
+          <input type="number" name="input_tries" class="textBox custom_m_multi" onblur="this.placeholder = '1'" onfocus="this.placeholder = ''" placeholder="1"><br>
+          
+          <a class="button custom_m_btn_top" onclick='getCustomSettings(false);' id="custom_m_btn_top">pes</a>
+          <a class="button last" onclick='reset()'>Back</a>
+      </div>
+
+
+
+      <div id = "multipregame_menu" class="menu">
+        <h1 class="header1" onclick="reset()" >Target</h1>
+        <span class="menu_text menu_text_big" id="pg_roomName">Target Multiplayer</span>
+        <a id="pg_url_address" class="menu_text" style="color:red" href="http://tarca.tk/?id=000000001">http://tarca.tk/?id=000000001</a>
+        <br>
+        <span class="menu_text">Game ends ... <span id="pg_gameGoal" class="menu_text_big inline">30</span><span id="pg_gameMode" class="menu_text inline"> seconds</span></span>
+        <span class="menu_text">Target's speed: <span id="pg_speed" class="menu_text_big inline">100%</span></span>
+        <span class="menu_text">Target's size: <span id="pg_size" class="menu_text_big inline">30-230%</span></span>
+        <span class="menu_text">Target's health: <span id="pg_health" class="menu_text_big inline">100</span></span>
+        <span class="menu_text">Shots per target: <span id="pg_shots" class="menu_text_big inline">3</span></span>
+        <span class="menu_text">Number of attempts: <span id="pg_tries" class="menu_text_big inline">1</span></span>
+        
+        <br>
+        <span class="menu_text">Player's name</span>
+          <input type="text" name="input_userName" class="textBox" onblur="this.placeholder = 'Igralec'" onfocus="this.placeholder = ''" placeholder="Igralec"><br>
+        
+
+        <a class="button custom_m_btn_top" onclick='document.getElementById("leaderboard_pregame").style.display = "none";showMultiGame();'>Start</a>
+        <a class="button last" onclick='loadOnlyLeaderboards("multipregame_menu");'>Leaderboard</a>
+
+        <div class="leaderboard" id="leaderboard_pregame">
+          <div id="leaderboard_pregame_inside"></div>
+        </div>
+        <a class="button last" onclick='document.getElementById("leaderboard_pregame").style.display = "none";reset()'>Main menu</a>
+    </div>
+
+
+
+      <div id = "results_menu" class="menu">
+          <h1 class="header1" id = "results_h1">0</h1>
+
+          <div class="leaderboard" id="leaderboard_results">
+            <span class="menu_text menu_text_big" id="lb_roomName">Target Multiplayer</span>
+            <a id="lb_url_address" class="menu_text" style="color:red" href="http://tarca.tk/?id=000000001">http://tarca.tk/?id=000000001</a>
+            <br>
+            <div id="leaderboard_results_inside"></div>
+          </div>
+
+          <a id="restart_button" class="button" onclick='document.getElementById("leaderboard_results_inside").innerHTML="";if(!gameOverDelay){showGame();}'>Restart<span id="tries_left_span" class = "button_span"> (3×)</span></a>
+          <a class="button" onclick='document.getElementById("leaderboard_results_inside").innerHTML="";if(!gameOverDelay){reset()}'>Main menu</a>
+      </div>
+  </div>
+  
+  <script src="menu.js"></script>
+  <script src="Tarca.js"></script>
+  <script src="game.js"></script>
+
+
+
+  <script>
+
+    document.getElementById("logo").onload = function(){
+      adjustPosition("main_menu", 0);
+    }
+    adjustPosition("main_menu", 0);
+
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+      document.getElementById("canvas").setAttribute("onmousedown", "");
+      document.getElementById("canvas").setAttribute("ontouchstart", "onCanvasClick(event)");
+      mobile=true;
+    }
+
+    if(window.location.search.substr(1)!="" && window.location.search.substr(1)!="igra"){
+      document.getElementById("main_menu").style.display = "none";
+      document.getElementById("top").style.display = "block";
+      fromURL = true;
+      loadGame(window.location.search.substr(1).substr(3));
+    }
+
+
+    window.addEventListener('popstate', function(event){
+      
+      if(window.location.search.substr(1)!="" && window.location.search.substr(1)!="igra"){
+        document.getElementById("main_menu").style.display = "none";
+        document.getElementById("top").style.display = "block";
+        fromURL = true;
+        loadGame(window.location.search.substr(1).substr(3));
+      }else{
+        fromPop = true;
+        reset();
+      }
+    });
+    
+      
+  </script> 
+</body>
+</html>
