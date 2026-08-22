@@ -126,6 +126,13 @@
 
       <div id = "results_menu" class="menu">
           <h1 class="header1" id = "results_h1">0</h1>
+          <span class="menu_text" id="results_record"></span>
+          <div id="results_stats">
+            <div class="stat"><span class="stat_value" id="results_stat_targets">0</span><span class="stat_label">targets</span></div>
+            <div class="stat"><span class="stat_value" id="results_stat_accuracy">0%</span><span class="stat_label">accuracy</span></div>
+            <div class="stat"><span class="stat_value" id="results_stat_avg">0</span><span class="stat_label">avg damage</span></div>
+            <div class="stat"><span class="stat_value" id="results_stat_best">0</span><span class="stat_label">best shot</span></div>
+          </div>
 
           <div class="leaderboard" id="leaderboard_results">
             <span class="menu_text menu_text_big" id="lb_roomName">Target Multiplayer</span>
@@ -139,6 +146,7 @@
       </div>
   </div>
   
+  <script src="stats.js"></script>
   <script src="menu.js"></script>
   <script src="tarca.js"></script>
   <script src="game.js"></script>

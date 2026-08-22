@@ -24,6 +24,10 @@ var leaderboards;
 
 var hits1 = 0;
 var targetsGone = 0;
+var statShots = 0;
+var statHits = 0;
+var statDamage = 0;
+var statBestShot = 0;
 var health = 100;
 var shots = 3;
 var damage;
@@ -116,11 +120,13 @@ function showResults(){
         case "score":
             results_h1.innerText = parseFloat(Math.round(time)/10).toFixed(1) + " s";
             break;
-      
+
         default:
           break;
     }
-    
+
+    showRunStats();
+
     document.getElementsByTagName("body")[0].style.overflow = "auto";
 
     if(gameMulti){
@@ -130,6 +136,47 @@ function showResults(){
         adjustPosition("results_menu", document.getElementById("top").clientHeight);
     }
 
+}
+
+
+
+
+function showRunStats(){
+    var runStats = computeRunStats({
+        shotsFired: statShots,
+        hitsOnTarget: statHits,
+        damageDealt: statDamage,
+        bestShotDamage: statBestShot,
+        targetsDestroyed: hits1
+    });
+    document.getElementById("results_stat_targets").innerText = runStats.targetsDestroyed;
+    document.getElementById("results_stat_accuracy").innerText = runStats.accuracyPct + "%";
+    document.getElementById("results_stat_avg").innerText = runStats.avgDamage;
+    document.getElementById("results_stat_best").innerText = runStats.bestShotDamage;
+
+    var pbKey = personalBestKey({
+        gameMode: gameMode,
+        gameGoal: gameGoal,
+        speedFactor: speedFactor,
+        minSizeFactor: minSizeFactor,
+        maxSizeFactor: maxSizeFactor,
+        health: health,
+        shots: shots
+    });
+    var previousBest = loadPersonalBest(pbKey);
+    var result = (gameMode == "time") ? score() : time;
+    var pb = evaluatePersonalBest(previousBest, result, gameMode);
+    var recordLine = document.getElementById("results_record");
+    if(pb.isRecord){
+        savePersonalBest(pbKey, pb.best);
+        recordLine.innerText = (previousBest === null) ?
+            "New personal best!" :
+            "New personal best! (previous: " + formatResult(previousBest, gameMode) + ")";
+        recordLine.classList.add("record");
+    }else{
+        recordLine.innerText = "Personal best: " + formatResult(pb.best, gameMode);
+        recordLine.classList.remove("record");
+    }
 }
 
 

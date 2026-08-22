@@ -18,6 +18,11 @@ targetsGone = 0;
 misses =0;
 escapes = 0;
 
+statShots = 0;
+statHits = 0;
+statDamage = 0;
+statBestShot = 0;
+
 time = 0;
 countdownStart = 3;
 counting = false;
@@ -212,6 +217,14 @@ actif = true;
 
 
 var clickResult = t1.clicked(cx, cy);
+statShots++;
+if(clickResult == 1 || clickResult == 2){
+    statHits++;
+    statDamage += damage;
+    if(damage > statBestShot){
+        statBestShot = damage;
+    }
+}
 if(clickResult == 1){
     hits1++;
     t1.erase(ctx);
