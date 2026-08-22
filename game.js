@@ -122,6 +122,7 @@ setTimeout(function(){
 if(interval != ""){
 clearInterval(interval);
 }
+clearInterval(speedChanger);
 interval = setInterval(tempusFugit, 100);
 speedChanger = setInterval(function(){t1.newSpeed();}, Math.random()*1500+ 450);
 }
@@ -210,7 +211,8 @@ actif = true;
 }
 
 
-if((t1.clicked(cx, cy) == 1)){
+var clickResult = t1.clicked(cx, cy);
+if(clickResult == 1){
     hits1++;
     t1.erase(ctx);
     t1.new();
@@ -222,17 +224,20 @@ if((t1.clicked(cx, cy) == 1)){
         shotsMade = 0;
         shotsSign.innerHTML = shots-shotsMade;
     }
+}else if(clickResult == 2){
+    if(shots ==0){
+        shotsSign.innerHTML = "∞";
+    }else{
+        shotsMade = 0;
+        shotsSign.innerHTML = shots-shotsMade;
+    }
 }else if(shotsMade>=shots && shots !=0){
     t1.erase(ctx);
     t1.new();
     t1.draw(ctx);
-    if(shots == 0){
-        shotsSign.innerHTML = "∞"
-    }else{
-        shotsMade = 0;
-        shotsSign.innerHTML = shots-shotsMade;
-        targetsGone++;
-    }
+    shotsMade = 0;
+    shotsSign.innerHTML = shots-shotsMade;
+    targetsGone++;
 }
 }
 

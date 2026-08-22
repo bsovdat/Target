@@ -191,14 +191,19 @@ function getCustomSettings(isMultiplayerMenu){
     }
 
     var inputs = [i_gameGoal, i_speed, i_sizeMin, i_sizeMax,i_health,i_shots, i_tries];
+    var defaults = [30, 100, 30, 230, 100, 3, 1];
     var parameters = [];
-    inputs.forEach(function(input){
+    inputs.forEach(function(input, index){
         var inputValue = input.value;
         if(inputValue == ''){
             inputValue = input.getAttribute("placeholder");
         }
         inputValue = inputValue.replace(/[^0-9.,-]/g, '');
-        parameters.push(parseFloat(inputValue));
+        var parsed = parseFloat(inputValue);
+        if(isNaN(parsed)){
+            parsed = defaults[index];
+        }
+        parameters.push(parsed);
         input.blur();
     });
 
@@ -209,6 +214,17 @@ function getCustomSettings(isMultiplayerMenu){
     health  = parameters[4];
     shots = parameters[5];
     tries = parameters[6];
+
+    if(maxSizeFactor < minSizeFactor){
+        var sizeSwap = minSizeFactor;
+        minSizeFactor = maxSizeFactor;
+        maxSizeFactor = sizeSwap;
+    }
+    if(!(health > 0)){
+        health = 100;
+    }
+    shots = Math.max(0, Math.round(shots));
+    tries = Math.max(0, Math.round(tries));
     roomName = (i_roomName.value == '') ? i_roomName.getAttribute("placeholder") : i_roomName.value;
 
     if(isMultiplayerMenu){
@@ -260,6 +276,12 @@ function loadGame(receivedID){
             minSizeFactor= rJSON.minSize;
             maxSizeFactor= rJSON.maxSize;
             tries= rJSON.tries;
+            if(rJSON.health != undefined){
+                health= rJSON.health;
+            }
+            if(rJSON.shots != undefined){
+                shots= rJSON.shots;
+            }
             showMultiplayerPregame();
         }
     };
@@ -278,7 +300,7 @@ function saveGame(receivedID){
         }
 
     };
-    xmlhttp.open("GET", "multi.php/?action=new&gameGoal="+ gameGoal+ "&gameMode="+ gameMode + "&speed="+ speedFactor + "&minSize="+ minSizeFactor+ "&maxSize="+ maxSizeFactor+ "&tries="+ tries+ "&name="+ encodeURIComponent(roomName)+ "");
+    xmlhttp.open("GET", "multi.php/?action=new&gameGoal="+ gameGoal+ "&gameMode="+ gameMode + "&speed="+ speedFactor + "&minSize="+ minSizeFactor+ "&maxSize="+ maxSizeFactor+ "&tries="+ tries+ "&health="+ health+ "&shots="+ shots+ "&name="+ encodeURIComponent(roomName)+ "");
 
     xmlhttp.send();
 }
@@ -510,6 +532,8 @@ function reset(){
         clearInterval(interval);
     }
     clearInterval(countdownVar);
+    clearInterval(speedChanger);
+    actif = false;
 
     window.scrollTo(0, 0);
     document.getElementById("top").style.display = "none";

@@ -75,9 +75,9 @@ function Tarca(x, y, r, vx, vy, maxx, maxy, ctx, speedF, minSizeF, maxSizeF, hea
                 setTimeout(function(){damageVisibility = false;}, 150);
                 this.health = 0;
                 return 1;
-            }else { 
+            }else {
                 setTimeout(function(){damageVisibility = false;}, 300);
-                return 0;
+                return 2;
             }
         }else{
             return 0;
