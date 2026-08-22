@@ -33,7 +33,7 @@ document.getElementsByTagName("body")[0].style.touchAction = "manipulation";
 shotsMade = 0;
 shotsSign.style.display = "block";
 
-c.setAttribute("height", (Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - c.offsetTop - 20) + "px") ;
+c.style.height = (Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - c.offsetTop - 20) + "px";
 var c_width = c.clientWidth;
 var c_height = c.clientHeight;
 c.setAttribute("height", c_height) ;
@@ -248,7 +248,7 @@ gameOver();
 
 function onBodyResize(){
 c = document.getElementById("canvas");
-c.setAttribute("height", (Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - c.offsetTop - 20) + "px") ;
+c.style.height = (Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - c.offsetTop - 20) + "px";
 var c_width = c.clientWidth;
 var c_height = c.clientHeight;
 c.setAttribute("height", c_height) ;
