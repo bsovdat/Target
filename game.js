@@ -237,13 +237,6 @@ if(clickResult == 1){
         shotsMade = 0;
         shotsSign.innerHTML = shots-shotsMade;
     }
-}else if(clickResult == 2){
-    if(shots ==0){
-        shotsSign.innerHTML = "∞";
-    }else{
-        shotsMade = 0;
-        shotsSign.innerHTML = shots-shotsMade;
-    }
 }else if(shotsMade>=shots && shots !=0){
     t1.erase(ctx);
     t1.new();
