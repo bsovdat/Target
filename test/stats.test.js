@@ -67,7 +67,8 @@ test("personalBestKey includes every setting that changes difficulty", function 
         minSizeFactor: 30,
         maxSizeFactor: 230,
         health: 100,
-        shots: 3
+        shots: 3,
+        missPenalty: -1
     };
     const key = personalBestKey(base);
     assert.strictEqual(typeof key, "string");
@@ -80,7 +81,8 @@ test("personalBestKey includes every setting that changes difficulty", function 
         { minSizeFactor: 20 },
         { maxSizeFactor: 80 },
         { health: 50 },
-        { shots: 0 }
+        { shots: 0 },
+        { missPenalty: -3 }
     ];
     variants.forEach(function (change) {
         const other = personalBestKey(Object.assign({}, base, change));

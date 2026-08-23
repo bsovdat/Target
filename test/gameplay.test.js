@@ -32,6 +32,7 @@ test("every shot consumes the per-target budget and exhaustion penalizes the sco
         actif = true;
         mobile = false;
         shots = 3;
+        missPenalty = -1;
         shotsMade = 0;
         hits1 = 0;
         targetsGone = 0;
@@ -71,5 +72,22 @@ test("every shot consumes the per-target budget and exhaustion penalizes the sco
     assert.strictEqual(ctx.shotsMade, 0);
     assert.strictEqual(ctx.shotsSign.innerHTML, 3);
     assert.strictEqual(ctx.targetsGone, 1);
-    assert.strictEqual(ctx.l_score.childNodes[0].nodeValue, -3);
+    assert.strictEqual(ctx.l_score.childNodes[0].nodeValue, -1);
+});
+
+test("missPenalty controls the score change per escaped target", function () {
+    const ctx = loadGameContext();
+    vm.runInContext(`
+        hits1 = 2;
+        targetsGone = 2;
+    `, ctx);
+
+    vm.runInContext(`missPenalty = -3;`, ctx);
+    assert.strictEqual(vm.runInContext(`score();`, ctx), -4);
+
+    vm.runInContext(`missPenalty = 0;`, ctx);
+    assert.strictEqual(vm.runInContext(`score();`, ctx), 2);
+
+    vm.runInContext(`missPenalty = -1;`, ctx);
+    assert.strictEqual(vm.runInContext(`score();`, ctx), 0);
 });

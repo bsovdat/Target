@@ -3,7 +3,6 @@ var gameGoal = 30;
 var gameGoal;
 
 var gameMulti = false;
-var loseOnMiss = false;
 
 var speedFactor = 100;
 var minSizeFactor = 30;
@@ -30,6 +29,7 @@ var statDamage = 0;
 var statBestShot = 0;
 var health = 100;
 var shots = 3;
+var missPenalty = -1;
 var damage;
 var shotsMade =0;
 var shotsSign = document.getElementById("shotsLeft");
@@ -161,7 +161,8 @@ function showRunStats(){
         minSizeFactor: minSizeFactor,
         maxSizeFactor: maxSizeFactor,
         health: health,
-        shots: shots
+        shots: shots,
+        missPenalty: missPenalty
     });
     var previousBest = loadPersonalBest(pbKey);
     var result = (gameMode == "time") ? score() : time;
@@ -229,6 +230,7 @@ function getCustomSettings(isMultiplayerMenu){
     i_roomName = document.getElementsByName("input_roomName")[0];
     i_health = document.getElementsByName("input_health")[0];
     i_shots = document.getElementsByName("input_shots")[0];
+    i_missPenalty = document.getElementsByName("input_missPenalty")[0];
 
     
     if(document.getElementById("checkS").classList.contains("checked")){
@@ -237,8 +239,8 @@ function getCustomSettings(isMultiplayerMenu){
         gameMode = "score";
     }
 
-    var inputs = [i_gameGoal, i_speed, i_sizeMin, i_sizeMax,i_health,i_shots, i_tries];
-    var defaults = [30, 100, 30, 230, 100, 3, 1];
+    var inputs = [i_gameGoal, i_speed, i_sizeMin, i_sizeMax,i_health,i_shots, i_missPenalty, i_tries];
+    var defaults = [30, 100, 30, 230, 100, 3, -1, 1];
     var parameters = [];
     inputs.forEach(function(input, index){
         var inputValue = input.value;
@@ -260,7 +262,8 @@ function getCustomSettings(isMultiplayerMenu){
     maxSizeFactor = parameters[3];
     health  = parameters[4];
     shots = parameters[5];
-    tries = parameters[6];
+    missPenalty = parameters[6];
+    tries = parameters[7];
 
     if(maxSizeFactor < minSizeFactor){
         var sizeSwap = minSizeFactor;
@@ -271,6 +274,7 @@ function getCustomSettings(isMultiplayerMenu){
         health = 100;
     }
     shots = Math.max(0, Math.round(shots));
+    missPenalty = Math.round(missPenalty);
     tries = Math.max(0, Math.round(tries));
     roomName = (i_roomName.value == '') ? i_roomName.getAttribute("placeholder") : i_roomName.value;
 
@@ -329,6 +333,9 @@ function loadGame(receivedID){
             if(rJSON.shots != undefined){
                 shots= rJSON.shots;
             }
+            if(rJSON.missPenalty != undefined){
+                missPenalty= parseFloat(rJSON.missPenalty);
+            }
             showMultiplayerPregame();
         }
     };
@@ -347,7 +354,7 @@ function saveGame(receivedID){
         }
 
     };
-    xmlhttp.open("GET", "multi.php/?action=new&gameGoal="+ gameGoal+ "&gameMode="+ gameMode + "&speed="+ speedFactor + "&minSize="+ minSizeFactor+ "&maxSize="+ maxSizeFactor+ "&tries="+ tries+ "&health="+ health+ "&shots="+ shots+ "&name="+ encodeURIComponent(roomName)+ "");
+    xmlhttp.open("GET", "multi.php/?action=new&gameGoal="+ gameGoal+ "&gameMode="+ gameMode + "&speed="+ speedFactor + "&minSize="+ minSizeFactor+ "&maxSize="+ maxSizeFactor+ "&tries="+ tries+ "&health="+ health+ "&shots="+ shots+ "&missPenalty="+ missPenalty+ "&name="+ encodeURIComponent(roomName)+ "");
 
     xmlhttp.send();
 }
@@ -442,6 +449,7 @@ function showMultiplayerPregame(){
     document.getElementById("pg_tries").innerText = (tries==0)?"neomejeno":tries;
     document.getElementById("pg_health").innerText = health;
     document.getElementById("pg_shots").innerText = shots;
+    document.getElementById("pg_missPenalty").innerText = missPenalty;
     document.getElementById("pg_url_address").innerHTML = roomID;
     document.getElementById("pg_url_address").setAttribute("href", roomID);
 
@@ -609,6 +617,7 @@ function reset(){
     maxSizeFactor = 230;
     health = 100;
     shots = 3;
+    missPenalty = -1;
 
     
     

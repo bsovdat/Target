@@ -182,7 +182,7 @@ l_time.childNodes[0].nodeValue = parseFloat(Math.round(time)/10).toFixed(1);
 }
 
 function score(){
-return (hits1-(3*targetsGone));
+return (hits1+(missPenalty*targetsGone));
 }
 
 function gameOver(){

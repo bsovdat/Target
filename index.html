@@ -81,7 +81,10 @@
           <input type="number" name="input_health" class="textBox" onblur="this.placeholder = '100'" onfocus="this.placeholder = ''" placeholder="100"><br>  
           
           <span class="menu_text">Shots per target <span class="menu_text_small"> (0 - infinity)</span></span>
-          <input type="number"name="input_shots" class="textBox" onblur="this.placeholder = '3'" onfocus="this.placeholder = ''" placeholder="3"><br>  
+          <input type="number"name="input_shots" class="textBox" onblur="this.placeholder = '3'" onfocus="this.placeholder = ''" placeholder="3"><br>
+
+          <span class="menu_text">Points per escaped target <span class="menu_text_small"> (0 - no penalty)</span></span>
+          <input type="number" name="input_missPenalty" class="textBox" onblur="this.placeholder = '-1'" onfocus="this.placeholder = ''" placeholder="-1"><br>
 
           <br class = "custom_m_multi">
           <span class="menu_text custom_m_multi">Name of the game</span>
@@ -106,6 +109,7 @@
         <span class="menu_text">Target's size: <span id="pg_size" class="menu_text_big inline">30-230%</span></span>
         <span class="menu_text">Target's health: <span id="pg_health" class="menu_text_big inline">100</span></span>
         <span class="menu_text">Shots per target: <span id="pg_shots" class="menu_text_big inline">3</span></span>
+        <span class="menu_text">Points per escaped target: <span id="pg_missPenalty" class="menu_text_big inline">-1</span></span>
         <span class="menu_text">Number of attempts: <span id="pg_tries" class="menu_text_big inline">1</span></span>
         
         <br>

@@ -19,7 +19,8 @@ function personalBestKey(settings) {
         settings.minSizeFactor,
         settings.maxSizeFactor,
         settings.health,
-        settings.shots
+        settings.shots,
+        settings.missPenalty
     ].join("|");
 }
 
